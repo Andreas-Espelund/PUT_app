@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_gallery">
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.example.put_app.ui.main.map.MapFragment"
+        android:label="@string/title_map"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/navigation_gallery"
+        android:name="com.example.put_app.ui.main.gallery.GalleryFragment"
+        android:label="@string/title_gallery"
+        tools:layout="@layout/fragment_gallery">
+
+        <action
+            android:id="@+id/upload_action"
+            app:destination="@id/upload"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_in_pop"
+            app:popExitAnim="@anim/slide_out_pop" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.example.put_app.ui.main.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/change_password_action"
+            app:destination="@id/change_password"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_in_pop"
+            app:popExitAnim="@anim/slide_out_pop" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/change_password"
+        android:name="com.example.put_app.ui.main.changepass.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password"
+        />
+
+    <fragment
+        android:id="@+id/upload"
+        android:name="com.example.put_app.ui.main.upload.UploadFragment"
+        android:label="Upload photo"
+        tools:layout="@layout/fragment_upload"
+        />
+
+</navigation>
