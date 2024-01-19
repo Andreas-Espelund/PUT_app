@@ -1,6 +1,7 @@
 package com.example.put_app.ui.main.upload;
 
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -62,6 +63,7 @@ public class UploadViewModel extends ViewModel {
         //String userID = repository.getCurrentUser().getId();
         String userID = "1";
         String filename = String.format("user_%s__file_%s",userID,indexUpdateTag);
+
         repository.uploadPhoto(userID,tagID,filename,encodedImage,
                 response -> {
                     repository.insertNewTag(userID, indexUpdateTag, newTagDes, newTagPho, newTagLoc, newTagPeopleName,

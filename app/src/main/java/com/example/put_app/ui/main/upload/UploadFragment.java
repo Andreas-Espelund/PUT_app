@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.put_app.databinding.FragmentUploadBinding;
+import com.example.put_app.ui.main.SharedMainViewModel;
 import com.example.put_app.util.PUTApplication;
 import com.example.put_app.util.Person;
 import com.example.put_app.util.RepositoryViewModelFactory;
@@ -34,6 +36,7 @@ import com.google.android.material.slider.Slider;
 public class UploadFragment extends Fragment {
 
     private UploadViewModel viewModel;
+    private SharedMainViewModel sharedViewModel;
     private FragmentUploadBinding binding;
     private ActivityResultLauncher<Intent> takePictureResultLauncher;
     private Bitmap imageToUpload;
@@ -45,6 +48,8 @@ public class UploadFragment extends Fragment {
     private boolean imageTaken = false;
 
     private String nextIndexUpdateTag = "";
+
+    private Location currentLocation;
     public static UploadFragment newInstance() {
         return new UploadFragment();
     }
@@ -57,6 +62,9 @@ public class UploadFragment extends Fragment {
         // init viewmodel
         RepositoryViewModelFactory factory = new RepositoryViewModelFactory(requireActivity());
         viewModel = new ViewModelProvider(this, factory).get(UploadViewModel.class);
+
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedMainViewModel.class);
+
 
         btn = binding.takePhoto;
         people = binding.photoPeople;
@@ -88,6 +96,13 @@ public class UploadFragment extends Fragment {
             nextIndexUpdateTag = result.getNumberOfTags();
         });
 
+        sharedViewModel.getLastKnownLocation().observe(getViewLifecycleOwner(), loc -> {
+            currentLocation = loc;
+        });
+
+
+
+
 
 
         openCamera();
@@ -118,14 +133,21 @@ public class UploadFragment extends Fragment {
 
 
     private void uploadPhoto() {
+
+        String imgDescription = description.getText().toString();
+        if (imgDescription.equals("")) imgDescription = "na";
+
+        String peopeNames = people.getText().toString();
+        if (peopeNames.equals("")) peopeNames = "na";
+
         viewModel.uploadPhoto(
                 "0",
                 imageToUpload,
                 nextIndexUpdateTag,
-                description.getText().toString(),
+                imgDescription,
                 "TODO THIS ONE ALSO",
-                "TODO LOCATION",
-                people.getText().toString()
+                String.format("%s;%s", currentLocation.getLatitude(), currentLocation.getLongitude()),
+                peopeNames
         );
 
     }

@@ -3,11 +3,16 @@ package com.example.put_app.model;
 
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import android.Manifest;
 import com.example.put_app.util.Person;
 import com.example.put_app.util.Hash;
 import org.json.JSONObject;
@@ -29,6 +35,8 @@ public class DataRepository {
     private RequestQueue requestQueue;
 
     private Person currentUser;
+
+
     public DataRepository(Context context) {
         this.requestQueue = Volley.newRequestQueue(context);
     }
@@ -208,5 +216,24 @@ public class DataRepository {
             }
         };
         requestQueue.add(stringRequest);
+    }
+
+
+    /**
+     * Get device location
+     * @param context Context of the caller
+     * */
+    public Location getDeviceLocation(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        String locationProvider = LocationManager.GPS_PROVIDER;
+        Location lastKnownLocation = null;
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+        }
+//
+        return lastKnownLocation;
     }
 }
